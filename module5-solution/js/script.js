@@ -64,7 +64,7 @@ var switchMenuToActive = function () {
 document.addEventListener("DOMContentLoaded", function (event) {
 
 // TODO: STEP 0: Look over the code from
-// *** start ***
+var categories = [];
 // to
 // *** finish ***
 // below.
@@ -79,6 +79,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
 // so it can be called when server responds with the categories data.
 
 // *** start ***
+  var homeHtmlUrl = "snippets/home-snippet.html";
+var allCategoriesUrl =
+  "https://coursera-jhu-default-rtdb.firebaseio.com/categories.json";
 // On first load, show home view
 showLoading("#main-content");
 $ajaxUtils.sendGetRequest(
@@ -102,6 +105,11 @@ function buildAndShowHomeHTML (categories) {
       // Pay attention to what type of data that function returns vs what the chosenCategoryShortName
       // variable's name implies it expects.
       // var chosenCategoryShortName = ....
+      function chooseRandomCategory(categories)
+      function chooseRandomCategory(categories) {
+  var randomIndex = Math.floor(Math.random() * categories.length);
+  return categories[randomIndex];
+}
 
 
       // TODO: STEP 3: Substitute {{randomCategoryShortName}} in the home html snippet with the
@@ -116,7 +124,18 @@ function buildAndShowHomeHTML (categories) {
       // it into the home html snippet.
       //
       // var homeHtmlToInsertIntoMainPage = ....
+$ajaxUtils.sendGetRequest(allCategoriesUrl, function (response) {
+  var randomCategory = chooseRandomCategory(response);
+  var randomCategoryShortName = randomCategory.short_name;
 
+  insertProperty(
+    html,
+    "randomCategoryShortName",
+    "'" + randomCategoryShortName + "'"
+  );
+
+  insertHtml("#main-content", html);
+});
 
       // TODO: STEP 4: Insert the produced HTML in STEP 3 into the main page
       // Use the existing insertHtml function for that purpose. Look through this code for an example
